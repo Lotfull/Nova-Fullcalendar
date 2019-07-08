@@ -40,7 +40,6 @@
                 ],
                 calendarWeekends: true,
                 calendarEvents: [],
-                service_id: this.resourceId,
                 debugStr: []
             };
         },
@@ -74,8 +73,7 @@
                         `<p>${info.event.extendedProps.description}</p>` +
                         `<p>${info.event.extendedProps.price} руб.</p>` +
                         `<p>${info.event.extendedProps.duration} минут</p>` +
-                        `<p>${info.event.extendedProps.user}</p>` +
-                        `<p>${info.event.extendedProps.phone}</p>`,
+                        `<p>${info.event.extendedProps.client}</p>`,
                     placement: 'top',
                     trigger: 'hover',
                     container: 'body'
@@ -90,32 +88,41 @@
                 || this.resourceName === 'schedules') {
                 seances_promise = axios.get(`/v1/services/${this.resourceId}/seances`);
             }
+
+            let prepare_client_data = client_data_json => {
+                let result = '';
+                for (let a in client_data_json) {
+                    if (!!client_data_json[a])
+                        result += `<p>${a}: ${client_data_json[a]}</p>`;
+                }
+                return result
+            };
+
             seances_promise.then(response => {
-                this.events = response.data.result;
-                if (this.events) {
+                this.seances = response.data.result;
+                if (this.seances) {
                     this.calendarEvents = [];
-                    this.events.forEach((event) => {
-                        let time = moment(event.time, ['hh:mm:ss']);
-                        let start = moment(event.date).set({
+                    this.seances.forEach((seance) => {
+                        let time = moment(seance.time, ['hh:mm:ss']);
+                        let start = moment(seance.date).set({
                             hour: time.get('hour'),
                             minute: time.get('minute')
                         });
                         let end = moment(start).add({
-                            minute: event.duration
+                            minute: seance.duration
                         });
                         let calendarEvent = {
-                            title: event.description,
+                            title: seance.description,
                             start: start.format(),
                             end: end.format(),
                             extendedProps: {
-                                description: event.description,
-                                price: event.price,
-                                duration: event.duration,
-                                service: event.service.name,
-                                user: event.attendee.name,
-                                phone: event.attendee.phone,
+                                description: seance.description,
+                                price: seance.price,
+                                duration: seance.duration,
+                                service: seance.service.name,
+                                client: prepare_client_data(seance.clients[0])
                             },
-                            url: '/nova/resources/seances/' + event.id
+                            url: '/nova/resources/seances/' + seance.id
                         };
                         this.calendarEvents.push(calendarEvent);
                     })
