@@ -55,9 +55,9 @@
                 // arg.dateStr
                 if (this.resourceName === 'services'
                     || this.resourceName === 'schedules') {
-                    window.open(`/nova/resources/seances/new?viaResource=${this.resourceName === 'schedules' ? 'services' : this.resourceName}&viaResourceId=${this.resourceId}&viaRelationship=seances`, "_blank");
+                    window.open(`/crm/resources/seances/new?viaResource=${this.resourceName === 'schedules' ? 'services' : this.resourceName}&viaResourceId=${this.resourceId}&viaRelationship=seances`, "_blank");
                 } else {
-                    window.open(`/nova/resources/seances/new`, "_blank");
+                    window.open(`/crm/resources/seances/new`, "_blank");
                 }
             },
             handleEventClick(event) {
@@ -122,7 +122,7 @@
                                 service: seance.service.name,
                                 client: prepare_client_data(seance.clients[0])
                             },
-                            url: '/nova/resources/seances/' + seance.id
+                            url: '/crm/resources/seances/' + seance.id
                         };
                         this.calendarEvents.push(calendarEvent);
                     })
