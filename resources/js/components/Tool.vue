@@ -89,11 +89,31 @@
                 seances_promise = axios.get(`/v1/services/${this.resourceId}/seances`);
             }
 
+            let ru_translate = {
+                'first_name': 'Имя',
+                'last_name': 'Фамилия',
+                'mid_name': 'Отчество',
+                'phone': 'Номер телефона',
+                'email': 'Email',
+                'birthdate': 'Дата рождения',
+                'sex': 'Пол',
+                'passport_id': 'Номер паспорта',
+                'issue_date': 'Дата выдачи паспорта',
+                'issued_by': 'Орган выдачи паспорта',
+                'driving_license': 'Номер водительского удостоверения',
+                'driving_exp': 'Водительский стаж',
+                'driving_cat': 'Водительские категории',
+                'height': 'Рост',
+                'weight': 'Вес',
+                'clothing_size': 'Размер одежды',
+                'shoe_size': 'Размер обуви'
+            };
+
             let prepare_client_data = client_data_json => {
                 let result = '';
                 for (let a in client_data_json) {
                     if (!!client_data_json[a])
-                        result += `<p>${a}: ${client_data_json[a]}</p>`;
+                        result += `<p>${ru_translate[a]}: ${client_data_json[a]}</p>`;
                 }
                 return result
             };
@@ -143,6 +163,9 @@
         width: 250px;
         color: #252d37;
         background-color: #ffffff;
+        border-radius: 3px;
+        border: 1px solid #3788d8;
+        padding: 5px;
     }
 </style>
 
